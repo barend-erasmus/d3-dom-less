@@ -1,0 +1,25 @@
+{
+  "name": "d3-dom-less",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint ./src/**/*.ts --fix --exclude ./src/**/*.d.ts",
+    "start": "npm run build & node ./dist/app.js",
+    "start-bar-chart": "npm run build & node ./dist/examples/bar-chart.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barend-erasmus/d3-dom-less.git"
+  },
+  "author": "Barend Erasmus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/barend-erasmus/d3-dom-less/issues"
+  },
+  "homepage": "https://github.com/barend-erasmus/d3-dom-less#readme",
+  "dependencies": {
+    "d3": "^4.13.0"
+  }
+}
