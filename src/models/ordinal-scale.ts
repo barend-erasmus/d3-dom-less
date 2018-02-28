@@ -1,20 +1,24 @@
 export class OrdinalScale {
     constructor(
-        private domain: string[],
-        private paddingPercentage: number,
-        private rangeMax: number,
-        private rangeMin: number,
+        public domain: string[],
+        public paddingPercentage: number,
+        public rangeMax: number,
+        public rangeMin: number,
     ) {
     }
 
+    public deltaRange(): number {
+        return this.rangeMax - this.rangeMin;
+    }
+
     public get(value: string): number {
-        const diffRangeMaxMin: number = this.rangeMax - this.rangeMin;
-
-        const padding: number = diffRangeMaxMin * this.paddingPercentage / (this.domain.length + 1);
-
         const index: number = this.domain.indexOf(value);
 
-        return padding + (padding  * index) + (this.width() * index);
+        return this.padding() + (this.padding()  * index) + (this.width() * index);
+    }
+
+    public padding(): number {
+        return this.deltaRange() * this.paddingPercentage / (this.domain.length + 1);
     }
 
     public width(): number {
@@ -22,4 +26,4 @@ export class OrdinalScale {
 
         return (diffRangeMaxMin - (diffRangeMaxMin * this.paddingPercentage)) / this.domain.length ;
     }
-} 
+}

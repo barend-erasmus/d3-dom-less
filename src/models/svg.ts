@@ -63,7 +63,7 @@ export class D3SVGElement {
     }
 
     private attributesToString(): string {
-        return this.attributes? ` ${Object.keys(this.attributes).map((key) => `${key}="${this.attributes[key]}"`).join(' ')}` : '';
+        return this.attributes ? ` ${Object.keys(this.attributes).map((key) => `${key}="${this.attributes[key]}"`).join(' ')}` : '';
     }
 
     private childrenToString(): string {
@@ -75,6 +75,6 @@ export class D3SVGElement {
     }
 
     private stylesToString(): string {
-        return this.styles? ` style="${Object.keys(this.styles).map((key) => `${key}: ${this.styles[key]}`).join(';')}"` : '';
+        return this.styles ? ` style="${Object.keys(this.styles).map((key) => `${key}: ${this.styles[key]}`).join(';')}"` : '';
     }
 }

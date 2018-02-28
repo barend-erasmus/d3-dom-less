@@ -1,9 +1,9 @@
 export class LinearScale {
     constructor(
-        private domainMax: number,
-        private domainMin: number,
-        private rangeMax: number,
-        private rangeMin: number,
+        public domainMax: number,
+        public domainMin: number,
+        public rangeMax: number,
+        public rangeMin: number,
     ) {
     }
 
@@ -12,7 +12,7 @@ export class LinearScale {
         const diffRangeMaxMin: number = this.rangeMax - this.rangeMin;
 
         const result: number = ((value - this.domainMin) / diffDomainMaxMin * diffRangeMaxMin) + this.rangeMin;
-        
+
         return result;
     }
-} 
+}

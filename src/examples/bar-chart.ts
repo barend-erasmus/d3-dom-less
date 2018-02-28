@@ -1,73 +1,61 @@
-import { D3SVGElement } from "../models/svg";
-import { OrdinalScale } from "../models/ordinal-scale";
-import { LinearScale } from "../models/linear-scale";
+import { LinearScale } from '../models/linear-scale';
+import { OrdinalScale } from '../models/ordinal-scale';
+import { D3SVGElement } from '../models/svg';
+import { Ticks } from '../models/ticks';
 
 const svg = D3SVGElement.create('svg');
 
-const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+const margin = { top: 20, right: 20, bottom: 30, left: 70 };
 
-const width = 400;
-const height = 400;
+const width = 700;
+const height = 700;
 
-const data = [
-    {
-        frequency: 10,
-        letter: 'A',
-    },
-    {
-        frequency: 20,
-        letter: 'B',
-    },
-    {
-        frequency: 30,
-        letter: 'C',
-    },
-];
+const rawData = {base: 'USD', date: '2018-02-27', rates: {AUD: 1.2762, BGN: 1.59, BRL: 3.238, CAD: 1.272, CHF: 0.93805, CNY: 6.3137, CZK: 20.647, DKK: 6.0532, EUR: 0.81294, GBP: 0.71864, HKD: 7.8264, HRK: 6.0525, HUF: 255.24, IDR: 13673.0, ILS: 3.4812, INR: 64.875, ISK: 100.72, JPY: 107.12, KRW: 1071.9, MXN: 18.722, MYR: 3.908, NOK: 7.8278, NZD: 1.3753, PHP: 52.261, PLN: 3.3875, RON: 3.7863, RUB: 55.929, SEK: 8.1945, SGD: 1.3198, THB: 31.39, TRY: 3.7907, ZAR: 11.656}};
 
-var x = new OrdinalScale(
-    data.map((x) => x.letter),
-    0.1,
+const data = Object.keys(rawData.rates).map((key) => {
+    return {
+        code: key,
+        rate: rawData.rates[key],
+    };
+}).filter((item) => item.rate > 10 && item.rate < 70);
+
+const xScale = new OrdinalScale(
+    data.map((x) => x.code),
+    0.2,
     width,
-    data.map((x) => x.frequency).reduce((a, b) => Math.min(a, b)));
+    data.map((x) => x.rate).reduce((a, b) => Math.min(a, b)));
 
-const y = new LinearScale(
-    data.map((x) => x.frequency).reduce((a, b) => Math.max(a, b)),
+const yScale = new LinearScale(
+    data.map((x) => x.rate).reduce((a, b) => Math.max(a, b)),
     0,
     0,
     height,
 );
 
 svg
-    .attr('height', 400 + margin.left + margin.right)
-    .attr('width', 400 + margin.top + margin.bottom)
-    .style('background', 'blue');
+    .attr('height', height + margin.top + margin.bottom)
+    .attr('width', width + margin.left + margin.right)
+    .style('background', '#222222');
 
-const group = svg.append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+const group = svg.append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-// g.append("g")
-//     .attr("class", "axis axis--x")
-//     .attr("transform", "translate(0," + height + ")")
-//     .call(d3.axisBottom(x));
+const ticks: Ticks = new Ticks(8);
 
-// g.append("g")
-//     .attr("class", "axis axis--y")
-//     .call(d3.axisLeft(y).ticks(10, "%"))
-//     .append("text")
-//     .attr("transform", "rotate(-90)")
-//     .attr("y", 6)
-//     .attr("dy", "0.71em")
-//     .attr("text-anchor", "end")
-//     .text("Frequency");
+ticks.drawOrdinalScaleBottom(
+    group.append('g')
+        .attr('transform', `translate(0, ${height})`),
+    xScale);
 
-for (let index: number = 0; index < data.length; index++) {
-    group.append("rect")
-        .attr("x", x.get(data[index].letter))
-        .attr("y", y.get(data[index].frequency))
-        .attr("width", x.width())
-        .attr("height", 400 - y.get(data[index].frequency))
-        .attr('fill', 'black');
+ticks.drawLinearScaleLeft(group.append('g'), yScale);
+
+for (const item of data) {
+    group.append('rect')
+        .attr('x', xScale.get(item.code))
+        .attr('y', yScale.get(item.rate))
+        .attr('width', xScale.width())
+        .attr('height', height - yScale.get(item.rate))
+        .attr('fill', '#84DCC6');
 }
-
 
 console.log(svg.toString());
